@@ -73,7 +73,7 @@ public class Order {
     public OrderHistory updateComment(String comment) {
         OrderHistory orderHistory = orderTimeLine.get(processId);
         processId+=1;
-        OrderHistory newOrderHistory = new OrderHistory(processId, orderHistory.getProduct(), orderHistory.getQuantity(),"quantity updated",  StringDate.getCurrentDateString() );
+        OrderHistory newOrderHistory = new OrderHistory(processId, orderHistory.getProduct(), orderHistory.getQuantity(),comment,  StringDate.getCurrentDateString() );
         orderTimeLine.put(processId, newOrderHistory);
         return newOrderHistory;
     }

@@ -21,7 +21,7 @@ public class Main {
                 System.out.println("order new --> starts order process");
                 System.out.println("order show all --> shows the current state of all orders");
                 System.out.println("order show id --> shows the timeline of order with specific order id");
-//                System.out.println("order update id --> updates order with specific order id");
+                System.out.println("order update id --> updates order with specific order id");
                 System.out.println("product new --> creates new product");
                 System.out.println("product show all --> shows list with all products");
                 System.out.println("product show <id> --> shows product with specific id");
@@ -96,7 +96,7 @@ public class Main {
                 for(Map.Entry<Integer, OrderHistory> entry : orderTimeLine.entrySet()){
 
                     if (entry.getValue().getUpdatedAt() != null) {
-                        System.out.println("Update " + (entry.getValue().getProcessId()-1) + "(" + entry.getValue().getComment() + " - " + entry.getValue().getUpdatedAt() + ")");
+                        System.out.println("Update " + (entry.getValue().getProcessId()-1) + " (" + entry.getValue().getComment() + " - " + entry.getValue().getUpdatedAt() + ")");
                     } else {
                         System.out.println("Original Order: ");
                     }
@@ -105,8 +105,35 @@ public class Main {
                     System.out.println("    Cost        : " + entry.getValue().getProduct().price().multiply(BigDecimal.valueOf(entry.getValue().getQuantity())) + " €" +
                             " (=" + entry.getValue().getQuantity() + "x" + entry.getValue().getProduct().price() + "€)");
                 }
+                System.out.println("What do you want to do next?");
+            } else if (command.matches("order update [0-9]*")) {
+                String split = command.split(" ")[2];
+                int id = Integer.parseInt(split);
+                Order order = shopService.orderRepo.getOrders().get(id);
 
-            } else {
+                System.out.println("Enter state if you want to update the state or enter quantity if you want to change the quantity.");
+                String answer = scanner.nextLine();
+                if (answer.equalsIgnoreCase("state")) {
+                    System.out.println("Enter the new state of the order");
+                    String newState = scanner.nextLine();
+                    order.updateComment(newState);
+                    System.out.println("Order has been updated successfully");
+                } else if (answer.equalsIgnoreCase("quantity")) {
+                    System.out.println("Enter the new quantity of the order");
+                    int quantity =  Integer.parseInt(scanner.nextLine());
+                    BigDecimal newPrice = order.getOrderTimeLine().get(order.processId).getProduct().price().multiply(BigDecimal.valueOf(quantity));
+                    System.out.println("The new price will be " +  newPrice + "€. Still update? (Y/N)");
+                    String newAnswer = scanner.nextLine();
+                    if (newAnswer.equalsIgnoreCase("Y")) {
+                        order.updateQuantity(quantity);
+                        System.out.println("Order has been updated successfully");
+                    }
+                } else {
+                    System.out.println("Unknown command");
+                }
+                System.out.println("What do you want to do next?");
+            }
+            else {
                 System.out.println("Unknown command, please try again or type 'man'");
             }
         }
