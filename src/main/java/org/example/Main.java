@@ -18,7 +18,10 @@ public class Main {
             command = scanner.nextLine();
             if (command.equals("man")) {
                 System.out.println("exit --> exit");
-                System.out.println("order --> starts order process");
+                System.out.println("order new --> starts order process");
+                System.out.println("order show all --> shows the current state of all orders");
+//                System.out.println("order show id --> shows the timeline of order id");
+//                System.out.println();
                 System.out.println("product new --> creates new product");
                 System.out.println("product show all --> shows list with all products");
                 System.out.println("product show <id> --> shows product with specific id");
@@ -53,14 +56,10 @@ public class Main {
                 System.out.println();
 
                 System.out.println("What do you want to do next?");
-            } else if (command.matches("order")) {
+            } else if (command.equals("order new")) {
                 System.out.println("Please enter the product id of the product you want to order:");
                 int productId =  Integer.parseInt(scanner.nextLine());
                 Product product = shopService.orderRepo.getProductRepo().getProductById(productId);
-//                if (product == null) {
-//                    System.out.println("Product with id " + productId + " not found");
-//                    break;
-//                }
                 System.out.println("How many of the product " + product.name() + " do you want to order:");
                 int quantity = Integer.parseInt(scanner.nextLine());
                 System.out.println("That will cost: " + product.price().multiply(BigDecimal.valueOf(quantity)) + " €. Do you still want to order? (Y/N)");
@@ -70,8 +69,25 @@ public class Main {
                     System.out.println("Order has been added successfully, your order id is " + order.getOrderId());
                     System.out.println("You need the order id to check on your order information.");
                 }
-            }
-            else {
+                System.out.println("What do you want to do next?");
+            } else if (command.equals("order show all")) {
+                Map<Integer, Order> orders = shopService.orderRepo.getOrders();
+                for (Map.Entry<Integer, Order> entry : orders.entrySet()) {
+                    int orderId = entry.getValue().getOrderId();
+                    int processId =  entry.getValue().getProcessId();
+                    OrderHistory currentState = entry.getValue().getOrderTimeLine().get(processId);
+
+                    System.out.println("Current state of order " + orderId + " ordered at " + currentState.getCreatedAt());
+                    if (currentState.getUpdatedAt() != null) {
+                        System.out.println("Latest update: " + currentState.getUpdatedAt() + " (" + currentState.getComment() + ")");
+                    }
+                    System.out.println("    Product name: " + currentState.getProduct().name());
+                    System.out.println("    Quantity    : " +  currentState.getQuantity());
+                    System.out.println("    Cost        : " + currentState.getProduct().price().multiply(BigDecimal.valueOf(currentState.getQuantity())) + " €" +
+                            " (=" + currentState.getQuantity() + "x" + currentState.getProduct().price() + "€)");
+                }
+                System.out.println("What do you want to do next?");
+            } else {
                 System.out.println("Unknown command, please try again or type 'man'");
             }
         }
