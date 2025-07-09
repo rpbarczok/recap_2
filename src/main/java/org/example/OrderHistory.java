@@ -6,15 +6,13 @@ public class OrderHistory {
     private final Product product;
     private final int quantity;
     private final String comment;
-    private final String createdAt;
     private final String updatedAt;
 
-    public OrderHistory(int processId, Product product, int quantity, String comment, String createdAt, String updatedAt) {
+    public OrderHistory(int processId, Product product, int quantity, String comment, String updatedAt) {
         this.processId = processId;
         this.product = product;
         this.quantity = quantity;
         this.comment = comment;
-        this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 
@@ -25,7 +23,6 @@ public class OrderHistory {
                 ", product=" + product +
                 ", quantity=" + quantity +
                 ", comment='" + comment + '\'' +
-                ", createdAt='" + createdAt + '\'' +
                 ", updatedAt='" + updatedAt + '\'' +
                 '}';
     }
@@ -46,9 +43,6 @@ public class OrderHistory {
         return comment;
     }
 
-    public String getCreatedAt() {
-        return createdAt;
-    }
 
     public String getUpdatedAt() {
         return updatedAt;

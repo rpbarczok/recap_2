@@ -2,10 +2,11 @@ package org.example;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class OrderListRepo implements OrderRepo {
     Integer orderCounter = 0;
-    Map<Integer, Order> orders = new HashMap<>();
+    Map<Integer, Order> orders = new TreeMap<>();
     ProductRepo productRepo;
 
     public OrderListRepo(ProductRepo productRepo) {

@@ -20,8 +20,8 @@ public class Main {
                 System.out.println("exit --> exit");
                 System.out.println("order new --> starts order process");
                 System.out.println("order show all --> shows the current state of all orders");
-//                System.out.println("order show id --> shows the timeline of order id");
-//                System.out.println();
+                System.out.println("order show id --> shows the timeline of order with specific order id");
+//                System.out.println("order update id --> updates order with specific order id");
                 System.out.println("product new --> creates new product");
                 System.out.println("product show all --> shows list with all products");
                 System.out.println("product show <id> --> shows product with specific id");
@@ -74,19 +74,38 @@ public class Main {
                 Map<Integer, Order> orders = shopService.orderRepo.getOrders();
                 for (Map.Entry<Integer, Order> entry : orders.entrySet()) {
                     int orderId = entry.getValue().getOrderId();
-                    int processId =  entry.getValue().getProcessId();
+                    int processId = entry.getValue().getProcessId();
                     OrderHistory currentState = entry.getValue().getOrderTimeLine().get(processId);
 
-                    System.out.println("Current state of order " + orderId + " ordered at " + currentState.getCreatedAt());
+                    System.out.println("Current state of order " + orderId + " ordered at " + entry.getValue().getCreatedAt());
                     if (currentState.getUpdatedAt() != null) {
                         System.out.println("Latest update: " + currentState.getUpdatedAt() + " (" + currentState.getComment() + ")");
                     }
                     System.out.println("    Product name: " + currentState.getProduct().name());
-                    System.out.println("    Quantity    : " +  currentState.getQuantity());
+                    System.out.println("    Quantity    : " + currentState.getQuantity());
                     System.out.println("    Cost        : " + currentState.getProduct().price().multiply(BigDecimal.valueOf(currentState.getQuantity())) + " €" +
                             " (=" + currentState.getQuantity() + "x" + currentState.getProduct().price() + "€)");
                 }
                 System.out.println("What do you want to do next?");
+            } else if (command.matches("order show [0-9]*")){
+                String split = command.split(" ")[2];
+                int id = Integer.parseInt(split);
+                Order order = shopService.orderRepo.getOrders().get(id);
+                Map<Integer, OrderHistory> orderTimeLine = order.getOrderTimeLine();
+                System.out.println("Order id " + order.getOrderId() + " ordered at " + order.getCreatedAt() + ": ");
+                for(Map.Entry<Integer, OrderHistory> entry : orderTimeLine.entrySet()){
+
+                    if (entry.getValue().getUpdatedAt() != null) {
+                        System.out.println("Update " + (entry.getValue().getProcessId()-1) + "(" + entry.getValue().getComment() + " - " + entry.getValue().getUpdatedAt() + ")");
+                    } else {
+                        System.out.println("Original Order: ");
+                    }
+                    System.out.println("    Product name: " + entry.getValue().getProduct().name());
+                    System.out.println("    Quantity    : " + entry.getValue().getQuantity());
+                    System.out.println("    Cost        : " + entry.getValue().getProduct().price().multiply(BigDecimal.valueOf(entry.getValue().getQuantity())) + " €" +
+                            " (=" + entry.getValue().getQuantity() + "x" + entry.getValue().getProduct().price() + "€)");
+                }
+
             } else {
                 System.out.println("Unknown command, please try again or type 'man'");
             }

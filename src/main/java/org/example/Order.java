@@ -9,10 +9,12 @@ import java.util.Objects;
 public class Order {
     int orderId;
     int processId=0;
+    String createdAt;
     Map<Integer, OrderHistory> orderTimeLine = new HashMap<Integer, OrderHistory>() ;
 
     public Order(int orderId, Product product, int quantity) {
         this.orderId = orderId;
+        this.createdAt = StringDate.getCurrentDateString();
         initializeOrder(product, quantity);
     }
 
@@ -24,13 +26,17 @@ public class Order {
         return processId;
     }
 
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
     public Map<Integer, OrderHistory> getOrderTimeLine() {
         return orderTimeLine;
     }
 
         public OrderHistory initializeOrder(Product product, int quantity) {
         processId+=1;
-        OrderHistory orderHistory = new OrderHistory(processId, product, quantity, "Initial Order", StringDate.getCurrentDateString(), null);
+        OrderHistory orderHistory = new OrderHistory(processId, product, quantity, "Initial Order", null);
         orderTimeLine.put(processId, orderHistory);
         return orderHistory;
     }
@@ -59,7 +65,7 @@ public class Order {
     public OrderHistory updateQuantity(int quantity) {
         OrderHistory orderHistory = orderTimeLine.get(processId);
         processId+=1;
-        OrderHistory newOrderHistory = new OrderHistory(processId, orderHistory.getProduct(), quantity,"quantity updated", orderHistory.getCreatedAt(), StringDate.getCurrentDateString() );
+        OrderHistory newOrderHistory = new OrderHistory(processId, orderHistory.getProduct(), quantity,"quantity updated", StringDate.getCurrentDateString() );
         orderTimeLine.put(processId, newOrderHistory);
         return newOrderHistory;
     }
@@ -67,7 +73,7 @@ public class Order {
     public OrderHistory updateComment(String comment) {
         OrderHistory orderHistory = orderTimeLine.get(processId);
         processId+=1;
-        OrderHistory newOrderHistory = new OrderHistory(processId, orderHistory.getProduct(), orderHistory.getQuantity(),"quantity updated", orderHistory.getCreatedAt(), StringDate.getCurrentDateString() );
+        OrderHistory newOrderHistory = new OrderHistory(processId, orderHistory.getProduct(), orderHistory.getQuantity(),"quantity updated",  StringDate.getCurrentDateString() );
         orderTimeLine.put(processId, newOrderHistory);
         return newOrderHistory;
     }
