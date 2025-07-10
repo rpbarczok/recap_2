@@ -5,8 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ProductRepo {
-    Map<Integer, Product> products = new HashMap<Integer, Product>();
-    int productCount = 0;
+    private Map<Integer, Product> products = new HashMap<Integer, Product>();
+    private int productCount = 0;
+
     public ProductRepo() {
     }
 

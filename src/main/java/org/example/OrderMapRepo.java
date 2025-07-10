@@ -5,9 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class OrderMapRepo implements OrderRepo {
-    Integer orderCounter = 0;
-    Map<Integer, Order> orders = new HashMap<>();
-    ProductRepo productRepo;
+    private Integer orderCounter = 0;
+    private final Map<Integer, Order> orders = new HashMap<>();
+    private final ProductRepo productRepo;
 
     public OrderMapRepo(ProductRepo productRepo) {
         this.productRepo = productRepo;

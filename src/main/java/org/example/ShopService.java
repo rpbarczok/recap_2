@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.Map;
 
 public class ShopService {
-    OrderRepo orderRepo;
+    private final OrderRepo orderRepo;
 
     public ShopService() {
         this.orderRepo = new OrderListRepo(new ProductRepo());
@@ -16,6 +16,10 @@ public class ShopService {
 
     public ShopService(OrderRepo orderRepo) {
             this.orderRepo = orderRepo;
+    }
+
+    public OrderRepo getOrderRepo() {
+        return orderRepo;
     }
 
     public Order addOrder(int productId, int quantity) {

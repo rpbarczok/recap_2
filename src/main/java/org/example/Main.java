@@ -51,7 +51,7 @@ public class Main {
             } else if (command.matches("product show [0-9]*")) {
                 String split = command.split(" ")[2];
                 int id = Integer.parseInt(split);
-                Product product = shopService.orderRepo.getProductRepo().getProductById(id);
+                Product product = shopService.getOrderRepo().getProductRepo().getProductById(id);
                 System.out.println(product.name() + " (id " + product.productId() + "): " + product.price() +" €");
                 System.out.println();
 
@@ -59,19 +59,19 @@ public class Main {
             } else if (command.equals("order new")) {
                 System.out.println("Please enter the product id of the product you want to order:");
                 int productId =  Integer.parseInt(scanner.nextLine());
-                Product product = shopService.orderRepo.getProductRepo().getProductById(productId);
+                Product product = shopService.getOrderRepo().getProductRepo().getProductById(productId);
                 System.out.println("How many of the product " + product.name() + " do you want to order:");
                 int quantity = Integer.parseInt(scanner.nextLine());
                 System.out.println("That will cost: " + product.price().multiply(BigDecimal.valueOf(quantity)) + " €. Do you still want to order? (Y/N)");
                 String answer = scanner.nextLine();
                 if (answer.equalsIgnoreCase("Y")) {
-                    Order order = shopService.orderRepo.addOrder(productId, quantity);
+                    Order order = shopService.getOrderRepo().addOrder(productId, quantity);
                     System.out.println("Order has been added successfully, your order id is " + order.getOrderId());
                     System.out.println("You need the order id to check on your order information.");
                 }
                 System.out.println("What do you want to do next?");
             } else if (command.equals("order show all")) {
-                Map<Integer, Order> orders = shopService.orderRepo.getOrders();
+                Map<Integer, Order> orders = shopService.getOrderRepo().getOrders();
                 for (Map.Entry<Integer, Order> entry : orders.entrySet()) {
                     int orderId = entry.getValue().getOrderId();
                     int processId = entry.getValue().getProcessId();
@@ -90,7 +90,7 @@ public class Main {
             } else if (command.matches("order show [0-9]*")){
                 String split = command.split(" ")[2];
                 int id = Integer.parseInt(split);
-                Order order = shopService.orderRepo.getOrders().get(id);
+                Order order = shopService.getOrderRepo().getOrders().get(id);
                 Map<Integer, OrderHistory> orderTimeLine = order.getOrderTimeLine();
                 System.out.println("Order id " + order.getOrderId() + " ordered at " + order.getCreatedAt() + ": ");
                 for(Map.Entry<Integer, OrderHistory> entry : orderTimeLine.entrySet()){
@@ -109,7 +109,7 @@ public class Main {
             } else if (command.matches("order update [0-9]*")) {
                 String split = command.split(" ")[2];
                 int id = Integer.parseInt(split);
-                Order order = shopService.orderRepo.getOrders().get(id);
+                Order order = shopService.getOrderRepo().getOrders().get(id);
 
                 System.out.println("Enter state if you want to update the state or enter quantity if you want to change the quantity.");
                 String answer = scanner.nextLine();
@@ -121,7 +121,7 @@ public class Main {
                 } else if (answer.equalsIgnoreCase("quantity")) {
                     System.out.println("Enter the new quantity of the order");
                     int quantity =  Integer.parseInt(scanner.nextLine());
-                    BigDecimal newPrice = order.getOrderTimeLine().get(order.processId).getProduct().price().multiply(BigDecimal.valueOf(quantity));
+                    BigDecimal newPrice = order.getOrderTimeLine().get(order.getProcessId()).getProduct().price().multiply(BigDecimal.valueOf(quantity));
                     System.out.println("The new price will be " +  newPrice + "€. Still update? (Y/N)");
                     String newAnswer = scanner.nextLine();
                     if (newAnswer.equalsIgnoreCase("Y")) {

@@ -7,10 +7,10 @@ import java.util.Map;
 import java.util.Objects;
 
 public class Order {
-    int orderId;
-    int processId=0;
-    String createdAt;
-    Map<Integer, OrderHistory> orderTimeLine = new HashMap<Integer, OrderHistory>() ;
+    private final int orderId;
+    private int processId=0;
+    private final String createdAt;
+    private final Map<Integer, OrderHistory> orderTimeLine = new HashMap<Integer, OrderHistory>() ;
 
     public Order(int orderId, Product product, int quantity) {
         this.orderId = orderId;
