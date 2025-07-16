@@ -1,10 +1,9 @@
 package org.example;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+
 
 public class Order {
     private final int orderId;
@@ -34,9 +33,9 @@ public class Order {
         return orderTimeLine;
     }
 
-        public OrderHistory initializeOrder(Product product, int quantity) {
+    public OrderHistory initializeOrder(Product product, int quantity) {
         processId+=1;
-        OrderHistory orderHistory = new OrderHistory(processId, product, quantity, "Initial Order", null);
+        OrderHistory orderHistory = new OrderHistory(processId, product, quantity, "Initial Order", null, Status.PROCESSING);
         orderTimeLine.put(processId, orderHistory);
         return orderHistory;
     }
@@ -65,16 +64,27 @@ public class Order {
     public OrderHistory updateQuantity(int quantity) {
         OrderHistory orderHistory = orderTimeLine.get(processId);
         processId+=1;
-        OrderHistory newOrderHistory = new OrderHistory(processId, orderHistory.product(), quantity,"quantity updated", StringDate.getCurrentDateString() );
-        orderTimeLine.put(processId, newOrderHistory);
+        OrderHistory newOrderHistory = orderHistory.withQuantity(quantity);
+        OrderHistory updatedOrderHistory = orderHistory.withUpdatedAt(StringDate.getCurrentDateString());
+        orderTimeLine.put(processId, updatedOrderHistory);
         return newOrderHistory;
     }
 
     public OrderHistory updateComment(String comment) {
         OrderHistory orderHistory = orderTimeLine.get(processId);
         processId+=1;
-        OrderHistory newOrderHistory = new OrderHistory(processId, orderHistory.product(), orderHistory.quantity(),comment,  StringDate.getCurrentDateString() );
-        orderTimeLine.put(processId, newOrderHistory);
+        OrderHistory newOrderHistory = orderHistory.withComment(comment);
+        OrderHistory updatedOrderHistory = orderHistory.withUpdatedAt(StringDate.getCurrentDateString());
+        orderTimeLine.put(processId, updatedOrderHistory);
+        return newOrderHistory;
+    }
+
+    public OrderHistory updateStatus(Status status) {
+        OrderHistory orderHistory = orderTimeLine.get(processId);
+        processId+=1;
+        OrderHistory newOrderHistory = orderHistory.withStatus(status);
+        OrderHistory updatedOrderHistory = orderHistory.withUpdatedAt(StringDate.getCurrentDateString());
+        orderTimeLine.put(processId, updatedOrderHistory);
         return newOrderHistory;
     }
 }

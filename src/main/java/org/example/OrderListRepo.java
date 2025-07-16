@@ -1,10 +1,13 @@
 package org.example;
+import lombok.Getter;
+
 import java.math.BigDecimal;
 import java.util.*;
 
 public class OrderListRepo implements OrderRepo {
     private Integer orderCounter = 0;
     private final List<Order> orders = new ArrayList<>();
+    @Getter
     private final ProductRepo productRepo;
 
     public OrderListRepo(ProductRepo productRepo) {
@@ -17,10 +20,6 @@ public class OrderListRepo implements OrderRepo {
             ordersMap.put(order.getOrderId(), order);
         }
         return ordersMap;
-    }
-
-    public ProductRepo getProductRepo() {
-        return productRepo;
     }
 
     public Product addProduct(String name, BigDecimal price) {
