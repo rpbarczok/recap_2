@@ -1,15 +1,18 @@
 package org.example;
 
 import java.math.BigDecimal;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Scanner;
+import java.util.TimeZone;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
         ShopService shopService = new ShopService();
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
 
         System.out.println("Type 'man' to see how it works:");
         Scanner scanner = new Scanner(System.in);
@@ -95,9 +98,9 @@ public class Main {
                     int processId = entry.getValue().getProcessId();
                     OrderHistory currentState = entry.getValue().getOrderTimeLine().get(processId);
 
-                    System.out.println("Current state of order " + orderId + " ordered at " + entry.getValue().getCreatedAt());
+                    System.out.println("Current state of order " + orderId + " ordered at " + entry.getValue().getCreatedAt().atZone(TimeZone.getDefault().toZoneId()).format(dtf));
                     if (currentState.updatedAt() != null) {
-                        System.out.println("Latest update: " + currentState.updatedAt() + " (" + currentState.status().getValue() + ")");
+                        System.out.println("Latest update: " + currentState.updatedAt().atZone(TimeZone.getDefault().toZoneId()).format(dtf) + " (" + currentState.status().getValue() + ")");
                     } else {
                         System.out.println("No update yet (" + currentState.status().getValue() + ")");
                     }
@@ -114,11 +117,11 @@ public class Main {
                 int id = Integer.parseInt(split);
                 Order order = shopService.getOrderRepo().getOrders().get(id);
                 Map<Integer, OrderHistory> orderTimeLine = order.getOrderTimeLine();
-                System.out.println("Order id " + order.getOrderId() + " ordered at " + order.getCreatedAt() + ": ");
+                System.out.println("Order id " + order.getOrderId() + " ordered at " + order.getCreatedAt().atZone(TimeZone.getDefault().toZoneId()).format(dtf) + ": ");
                 for(Map.Entry<Integer, OrderHistory> entry : orderTimeLine.entrySet()){
 
                     if (entry.getValue().updatedAt() != null) {
-                        System.out.println("Update " + (entry.getValue().processId()-1) + " (" + entry.getValue().status().getValue() + " - " + entry.getValue().updatedAt() + ")");
+                        System.out.println("Update " + (entry.getValue().processId()-1) + " (" + entry.getValue().status().getValue() + " - " + entry.getValue().updatedAt().atZone(TimeZone.getDefault().toZoneId()).format(dtf) + ")");
                         if (entry.getValue().comment().isEmpty()) {System.out.println(entry.getValue().comment());}
                     } else {
                         System.out.println("Original Order: ");

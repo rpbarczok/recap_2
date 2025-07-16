@@ -1,17 +1,18 @@
 package org.example;
 
+import java.time.Instant;
 import java.util.*;
 
 
 public class Order {
     private final int orderId;
     private int processId=0;
-    private final String createdAt;
+    private final Instant createdAt;
     private final Map<Integer, OrderHistory> orderTimeLine = new HashMap<Integer, OrderHistory>() ;
 
     public Order(int orderId, Product product, int quantity) {
         this.orderId = orderId;
-        this.createdAt = StringDate.getCurrentDateString();
+        this.createdAt = Instant.now();
         initializeOrder(product, quantity);
     }
 
@@ -23,7 +24,7 @@ public class Order {
         return processId;
     }
 
-    public String getCreatedAt() {
+    public Instant getCreatedAt() {
         return createdAt;
     }
 
@@ -64,7 +65,7 @@ public class Order {
         processId+=1;
         OrderHistory newProcessId = orderHistory.withProcessId(processId);
         OrderHistory newOrderHistory = newProcessId.withQuantity(quantity);
-        OrderHistory updatedOrderHistory = newOrderHistory.withUpdatedAt(StringDate.getCurrentDateString());
+        OrderHistory updatedOrderHistory = newOrderHistory.withUpdatedAt(Instant.now());
         orderTimeLine.put(processId, updatedOrderHistory);
     }
 
@@ -73,7 +74,7 @@ public class Order {
         processId+=1;
         OrderHistory newProcessId = orderHistory.withProcessId(processId);
         OrderHistory newOrderHistory = newProcessId.withComment(comment);
-        OrderHistory updatedOrderHistory = newOrderHistory.withUpdatedAt(StringDate.getCurrentDateString());
+        OrderHistory updatedOrderHistory = newOrderHistory.withUpdatedAt(Instant.now());
         orderTimeLine.put(processId, updatedOrderHistory);
     }
 
@@ -82,7 +83,7 @@ public class Order {
         processId+=1;
         OrderHistory newProcessId = orderHistory.withProcessId(processId);
         OrderHistory newOrderHistory = newProcessId.withStatus(status);
-        OrderHistory updatedOrderHistory = newOrderHistory.withUpdatedAt(StringDate.getCurrentDateString());
+        OrderHistory updatedOrderHistory = newOrderHistory.withUpdatedAt(Instant.now());
         orderTimeLine.put(processId, updatedOrderHistory);
     }
 
