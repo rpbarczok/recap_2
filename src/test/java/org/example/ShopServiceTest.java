@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -36,5 +38,25 @@ class ShopServiceTest {
         Order result = shopService.addOrder(17, 1);
         assertNull(result);
     }
-    
+
+    @Test
+    void showOrderByStatus_returns_right_Orders() {
+        ShopService shopService = new ShopService(productRepo);
+
+        Order order1 = shopService.addOrder(1, 1);
+        Order order2 = shopService.addOrder(2, 2);
+        Order order3 = shopService.addOrder(3, 30);
+
+        shopService.updateOrder(1,5);
+        shopService.updateOrder(1,Status.IN_DELIVERY);
+        shopService.updateOrder(2,Status.IN_DELIVERY);
+
+        Map<Integer, Order> expected = new HashMap<Integer, Order>();
+        expected.put(1, order1);
+        expected.put(2, order2);
+        Map<Integer, Order> actual = shopService.showOrdersByStatus(Status.IN_DELIVERY);
+
+        assertEquals(expected, actual);
+
+    }
 }
