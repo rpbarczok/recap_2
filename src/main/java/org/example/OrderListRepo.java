@@ -1,12 +1,10 @@
 package org.example;
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 public class OrderListRepo implements OrderRepo {
     private Integer orderCounter = 0;
-    private final Map<Integer, Order> orders = new TreeMap<>();
+    private final List<Order> orders = new ArrayList<>();
     private final ProductRepo productRepo;
 
     public OrderListRepo(ProductRepo productRepo) {
@@ -14,7 +12,11 @@ public class OrderListRepo implements OrderRepo {
     }
 
     public Map<Integer, Order> getOrders() {
-        return orders;
+        Map<Integer, Order> ordersMap = new HashMap<>();
+        for (Order order : orders) {
+            ordersMap.put(order.getOrderId(), order);
+        }
+        return ordersMap;
     }
 
     public ProductRepo getProductRepo() {
@@ -24,17 +26,18 @@ public class OrderListRepo implements OrderRepo {
     public Product addProduct(String name, BigDecimal price) {
         return productRepo.addProduct(name, price);
     }
+
     public Order addOrder(Integer productId, Integer quantity) {
         orderCounter++;
         Product product = productRepo.getProductById(productId);
         BigDecimal sum = product.price().multiply(new BigDecimal(quantity));
         Order order = new Order(orderCounter, product, quantity);
-        orders.put(orderCounter,order);
+        orders.add(order);
         return order;
     }
 
     public Order addOrder(Order order) {
-        orders.put(order.getOrderId(), order);
+        orders.add(order);
         return order;
     }
 

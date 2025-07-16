@@ -78,13 +78,13 @@ public class Main {
                     OrderHistory currentState = entry.getValue().getOrderTimeLine().get(processId);
 
                     System.out.println("Current state of order " + orderId + " ordered at " + entry.getValue().getCreatedAt());
-                    if (currentState.getUpdatedAt() != null) {
-                        System.out.println("Latest update: " + currentState.getUpdatedAt() + " (" + currentState.getComment() + ")");
+                    if (currentState.updatedAt() != null) {
+                        System.out.println("Latest update: " + currentState.updatedAt() + " (" + currentState.comment() + ")");
                     }
-                    System.out.println("    Product name: " + currentState.getProduct().name());
-                    System.out.println("    Quantity    : " + currentState.getQuantity());
-                    System.out.println("    Cost        : " + currentState.getProduct().price().multiply(BigDecimal.valueOf(currentState.getQuantity())) + " €" +
-                            " (=" + currentState.getQuantity() + "x" + currentState.getProduct().price() + "€)");
+                    System.out.println("    Product name: " + currentState.product().name());
+                    System.out.println("    Quantity    : " + currentState.quantity());
+                    System.out.println("    Cost        : " + currentState.product().price().multiply(BigDecimal.valueOf(currentState.quantity())) + " €" +
+                            " (=" + currentState.quantity() + "x" + currentState.product().price() + "€)");
                 }
                 System.out.println("What do you want to do next?");
             } else if (command.matches("order show [0-9]*")){
@@ -95,15 +95,15 @@ public class Main {
                 System.out.println("Order id " + order.getOrderId() + " ordered at " + order.getCreatedAt() + ": ");
                 for(Map.Entry<Integer, OrderHistory> entry : orderTimeLine.entrySet()){
 
-                    if (entry.getValue().getUpdatedAt() != null) {
-                        System.out.println("Update " + (entry.getValue().getProcessId()-1) + " (" + entry.getValue().getComment() + " - " + entry.getValue().getUpdatedAt() + ")");
+                    if (entry.getValue().updatedAt() != null) {
+                        System.out.println("Update " + (entry.getValue().processId()-1) + " (" + entry.getValue().comment() + " - " + entry.getValue().updatedAt() + ")");
                     } else {
                         System.out.println("Original Order: ");
                     }
-                    System.out.println("    Product name: " + entry.getValue().getProduct().name());
-                    System.out.println("    Quantity    : " + entry.getValue().getQuantity());
-                    System.out.println("    Cost        : " + entry.getValue().getProduct().price().multiply(BigDecimal.valueOf(entry.getValue().getQuantity())) + " €" +
-                            " (=" + entry.getValue().getQuantity() + "x" + entry.getValue().getProduct().price() + "€)");
+                    System.out.println("    Product name: " + entry.getValue().product().name());
+                    System.out.println("    Quantity    : " + entry.getValue().quantity());
+                    System.out.println("    Cost        : " + entry.getValue().product().price().multiply(BigDecimal.valueOf(entry.getValue().quantity())) + " €" +
+                            " (=" + entry.getValue().quantity() + "x" + entry.getValue().product().price() + "€)");
                 }
                 System.out.println("What do you want to do next?");
             } else if (command.matches("order update [0-9]*")) {
@@ -121,7 +121,7 @@ public class Main {
                 } else if (answer.equalsIgnoreCase("quantity")) {
                     System.out.println("Enter the new quantity of the order");
                     int quantity =  Integer.parseInt(scanner.nextLine());
-                    BigDecimal newPrice = order.getOrderTimeLine().get(order.getProcessId()).getProduct().price().multiply(BigDecimal.valueOf(quantity));
+                    BigDecimal newPrice = order.getOrderTimeLine().get(order.getProcessId()).product().price().multiply(BigDecimal.valueOf(quantity));
                     System.out.println("The new price will be " +  newPrice + "€. Still update? (Y/N)");
                     String newAnswer = scanner.nextLine();
                     if (newAnswer.equalsIgnoreCase("Y")) {

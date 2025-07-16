@@ -65,7 +65,7 @@ public class Order {
     public OrderHistory updateQuantity(int quantity) {
         OrderHistory orderHistory = orderTimeLine.get(processId);
         processId+=1;
-        OrderHistory newOrderHistory = new OrderHistory(processId, orderHistory.getProduct(), quantity,"quantity updated", StringDate.getCurrentDateString() );
+        OrderHistory newOrderHistory = new OrderHistory(processId, orderHistory.product(), quantity,"quantity updated", StringDate.getCurrentDateString() );
         orderTimeLine.put(processId, newOrderHistory);
         return newOrderHistory;
     }
@@ -73,7 +73,7 @@ public class Order {
     public OrderHistory updateComment(String comment) {
         OrderHistory orderHistory = orderTimeLine.get(processId);
         processId+=1;
-        OrderHistory newOrderHistory = new OrderHistory(processId, orderHistory.getProduct(), orderHistory.getQuantity(),comment,  StringDate.getCurrentDateString() );
+        OrderHistory newOrderHistory = new OrderHistory(processId, orderHistory.product(), orderHistory.quantity(),comment,  StringDate.getCurrentDateString() );
         orderTimeLine.put(processId, newOrderHistory);
         return newOrderHistory;
     }
