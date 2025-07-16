@@ -30,7 +30,7 @@ class ProductRepoTest {
         productRepo.addProduct("Hammer", new BigDecimal("12.99"));
         productRepo.addProduct("Zange", new BigDecimal("12.99"));
 
-        Product result = productRepo.getProductById(2);
+        Product result = productRepo.getProductById(2).orElse(null);
 
         assertEquals(product, result);
 

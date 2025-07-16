@@ -26,13 +26,18 @@ public class OrderListRepo implements OrderRepo {
         return productRepo.addProduct(name, price);
     }
 
-    public Order addOrder(Integer productId, Integer quantity) {
+    public Order addOrder(Integer productId, Integer quantity) throws Exception {
         orderCounter++;
-        Product product = productRepo.getProductById(productId);
-        BigDecimal sum = product.price().multiply(new BigDecimal(quantity));
-        Order order = new Order(orderCounter, product, quantity);
-        orders.add(order);
-        return order;
+        Product product = productRepo.getProductById(productId).orElse(null);
+        if (product != null) {
+            BigDecimal sum = product.price().multiply(new BigDecimal(quantity));
+            Order order = new Order(orderCounter, product, quantity);
+            orders.add(order);
+            return order;
+        } else {
+            throw new Exception("Product with id " + productId + " not found!");
+        }
+
     }
 
     public Order addOrder(Order order) {

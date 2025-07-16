@@ -29,10 +29,13 @@ class OrderListRepoTest {
 
         Product product = new Product(1,"Hammer", price);
         Order expected = new Order(1, product, 1);
+        try {
+            Order result = orderListRepo.addOrder(1, 1);
+            assertEquals(expected.toString(), result.toString());
+        } catch (Exception e) {
+            fail();
+        }
 
-        Order result = orderListRepo.addOrder(1, 1);
-
-        assertEquals(expected.toString(), result.toString());
     }
 
     @Test
@@ -47,10 +50,15 @@ class OrderListRepoTest {
 
         OrderListRepo orderListRepo= new OrderListRepo(productRepo);
 
-        orderListRepo.addOrder(1, 1);
-        orderListRepo.addOrder(1, 2);
+        try {
+            orderListRepo.addOrder(1, 1);
+            orderListRepo.addOrder(1, 2);
 
-        assertEquals(expected.toString(), orderListRepo.getOrders().toString());
+            assertEquals(expected.toString(), orderListRepo.getOrders().toString());
+        } catch (Exception e) {
+            fail();
+        }
+
 
 
     }
@@ -61,11 +69,16 @@ class OrderListRepoTest {
 
 
         OrderListRepo orderListRepo= new OrderListRepo(productRepo);
-        orderListRepo.addOrder(1, 1);
-        orderListRepo.addOrder(1, 2);
+        try {
+            orderListRepo.addOrder(1, 1);
+            orderListRepo.addOrder(1, 2);
 
-        Order result = orderListRepo.getOrderById(1);
+            Order result = orderListRepo.getOrderById(1);
 
-        assertEquals(result.toString(), result.toString());
+            assertEquals(result.toString(), result.toString());
+        } catch (Exception e) {
+            fail();
+        }
+
     }
 }

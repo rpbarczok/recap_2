@@ -3,6 +3,7 @@ package org.example;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class ProductRepo {
     private Map<Integer, Product> products = new HashMap<Integer, Product>();
@@ -22,8 +23,8 @@ public class ProductRepo {
         return product;
     }
 
-    public Product getProductById(int productId) {
-        return products.get(productId);
+    public Optional<Product> getProductById(int productId) {
+        return Optional.ofNullable(products.get(productId));
     }
 
 
