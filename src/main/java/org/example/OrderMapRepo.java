@@ -22,13 +22,17 @@ public class OrderMapRepo implements OrderRepo {
         return productRepo.addProduct(name, price);
     }
 
-    public Order addOrder(Integer productId, Integer quantity) {
-        orderCounter++;
-        Product product = productRepo.getProductById(productId);
-        BigDecimal sum = product.price().multiply(new BigDecimal(quantity));
-        Order order = new Order(orderCounter, product, quantity);
-        orders.put(orderCounter,order);
-        return order;
+    public Order addOrder(Integer productId, Integer quantity) throws Exception {
+        Product product = productRepo.getProductById(productId).orElse(null);
+        if (product != null) {
+            orderCounter++;
+            BigDecimal sum = product.price().multiply(new BigDecimal(quantity));
+            Order order = new Order(orderCounter, product, quantity);
+            orders.put(orderCounter,order);
+            return order;
+        } else {
+            throw new Exception("Product not found");
+        }
     }
 
     public Order addOrder(Order order) {

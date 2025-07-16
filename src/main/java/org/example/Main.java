@@ -55,28 +55,38 @@ public class Main {
 
                 String split = command.split(" ")[2];
                 int id = Integer.parseInt(split);
-                Product product = shopService.getOrderRepo().getProductRepo().getProductById(id);
-                System.out.println(product.name() + " (id " + product.productId() + "): " + product.price() +" €");
-                System.out.println();
-
+                Product product = shopService.getOrderRepo().getProductRepo().getProductById(id).orElse(null);
+                if (product == null) {
+                    System.out.println("Product with id " + id + " not found! Please try again.");
+                } else {
+                    System.out.println(product.name() + " (id " + product.productId() + "): " + product.price() +" €");
+                    System.out.println();
+                }
                 System.out.println("What do you want to do next?");
 
             } else if (command.equals("order new")) {
 
                 System.out.println("Please enter the product id of the product you want to order:");
                 int productId =  Integer.parseInt(scanner.nextLine());
-                Product product = shopService.getOrderRepo().getProductRepo().getProductById(productId);
-                System.out.println("How many of the product " + product.name() + " do you want to order:");
-                int quantity = Integer.parseInt(scanner.nextLine());
-                System.out.println("That will cost: " + product.price().multiply(BigDecimal.valueOf(quantity)) + " €. Do you still want to order? (Y/N)");
-                String answer = scanner.nextLine();
-                if (answer.equalsIgnoreCase("Y")) {
-                    Order order = shopService.getOrderRepo().addOrder(productId, quantity);
-                    System.out.println("Order has been added successfully, your order id is " + order.getOrderId());
-                    System.out.println("You need the order id to check on your order information.");
+                Product product = shopService.getOrderRepo().getProductRepo().getProductById(productId).orElse(null);
+                if (product == null) {
+                    System.out.println("Product with id " + productId + " not found! Please try again.");
+                } else {
+                    System.out.println("How many of the product " + product.name() + " do you want to order:");
+                    int quantity = Integer.parseInt(scanner.nextLine());
+                    System.out.println("That will cost: " + product.price().multiply(BigDecimal.valueOf(quantity)) + " €. Do you still want to order? (Y/N)");
+                    String answer = scanner.nextLine();
+                    if (answer.equalsIgnoreCase("Y")) {
+                        try {
+                            Order order = shopService.getOrderRepo().addOrder(productId, quantity);
+                            System.out.println("Order has been added successfully, your order id is " + order.getOrderId());
+                            System.out.println("You need the order id to check on your order information.");
+                        } catch (Exception e) {
+                            System.out.println("Order with id " + productId + " not found! Please try again.");
+                        }
+                    }
+                    System.out.println("What do you want to do next?");
                 }
-                System.out.println("What do you want to do next?");
-
             } else if (command.equals("order show all")) {
 
                 Map<Integer, Order> orders = shopService.getOrderRepo().getOrders();

@@ -8,7 +8,7 @@ import java.util.Map;
 
 public interface OrderRepo {
 
-    Order addOrder(Integer productId, Integer quantity);
+    Order addOrder(Integer productId, Integer quantity) throws Exception;
 
     Order addOrder(Order order);
 
