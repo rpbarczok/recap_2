@@ -36,7 +36,18 @@ public class ShopService {
         Order order = orderRepo.getOrderById(orderId);
         order.updateQuantity(quantity);
         return orderRepo.getOrderById(orderId);
+    }
 
+    public Order updateOrder(int orderId, String comment) {
+        Order order = orderRepo.getOrderById(orderId);
+        order.updateComment(comment);
+        return orderRepo.getOrderById(orderId);
+    }
+
+    public Order updateStatus(int orderId, Status status) {
+        Order order = orderRepo.getOrderById(orderId);
+        order.updateStatus(status);
+        return orderRepo.getOrderById(orderId);
     }
 
     public Product addNewProduct(String name, BigDecimal price) {

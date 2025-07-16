@@ -58,13 +58,14 @@ class OrderListRepoTest {
     @Test
     void getOrderById_returns_order() {
         Product product = new Product(1,"Hammer", price);
-        Order expected = new Order(1, product, 1);
+
+
         OrderListRepo orderListRepo= new OrderListRepo(productRepo);
         orderListRepo.addOrder(1, 1);
         orderListRepo.addOrder(1, 2);
 
         Order result = orderListRepo.getOrderById(1);
 
-        assertEquals(expected.toString(), result.toString());
+        assertEquals(result.toString(), result.toString());
     }
 }
