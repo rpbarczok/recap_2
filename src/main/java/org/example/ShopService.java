@@ -1,17 +1,21 @@
 package org.example;
 
 import java.math.BigDecimal;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ShopService {
     private final OrderRepo orderRepo;
 
     public ShopService() {
-        this.orderRepo = new OrderListRepo(new ProductRepo());
+        this.orderRepo = new OrderMapRepo(new ProductRepo());
     }
 
     public ShopService(ProductRepo productRepo) {
-        this.orderRepo = new OrderListRepo(productRepo);
+        this.orderRepo = new OrderMapRepo(productRepo);
     }
 
     public ShopService(OrderRepo orderRepo) {
@@ -33,21 +37,15 @@ public class ShopService {
     }
 
     public Order updateOrder(int orderId, int quantity) {
-        Order order = orderRepo.getOrderById(orderId);
-        order.updateQuantity(quantity);
-        return orderRepo.getOrderById(orderId);
+        return orderRepo.updateOrder(orderId, quantity);
     }
 
     public Order updateOrder(int orderId, String comment) {
-        Order order = orderRepo.getOrderById(orderId);
-        order.updateComment(comment);
-        return orderRepo.getOrderById(orderId);
+        return orderRepo.updateOrder(orderId, comment);
     }
 
-    public Order updateStatus(int orderId, Status status) {
-        Order order = orderRepo.getOrderById(orderId);
-        order.updateStatus(status);
-        return orderRepo.getOrderById(orderId);
+    public Order updateOrder(int orderId, Status status) {
+        return orderRepo.updateOrder(orderId, status);
     }
 
     public Product addNewProduct(String name, BigDecimal price) {
@@ -58,4 +56,8 @@ public class ShopService {
         return orderRepo.getProductRepo().getProducts();
     }
 
+    public Map<Integer, Order> showOrdersByStatus(Status state) {
+        Map<Integer,Order> orderMap = orderRepo.getOrders();
+        return orderMap.entrySet().stream().filter(e -> e.getValue().getLatestOrderHistory().status() == state).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
 }

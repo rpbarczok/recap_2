@@ -135,13 +135,13 @@ public class Main {
                     String newState = scanner.nextLine().toLowerCase();
                     switch (newState) {
                         case "processing", "in process":
-                            shopService.updateStatus(order.getOrderId(), Status.PROCESSING);
+                            shopService.updateOrder(order.getOrderId(), Status.PROCESSING);
                             break;
                         case "on the road", "in delivery", "delivery":
-                            shopService.updateStatus(order.getOrderId(), Status.IN_DELIVERY);
+                            shopService.updateOrder(order.getOrderId(), Status.IN_DELIVERY);
                             break;
                         case "completed":
-                            shopService.updateStatus(order.getOrderId(), Status.COMPLETED);
+                            shopService.updateOrder(order.getOrderId(), Status.COMPLETED);
                             break;
                         default:
                             System.out.println("Unknown state: " + newState + ". Please try again.");
@@ -153,13 +153,13 @@ public class Main {
                     System.out.println("The new price will be " +  newPrice + "€. Still update? (Y/N)");
                     String newAnswer = scanner.nextLine();
                     if (newAnswer.equalsIgnoreCase("Y")) {
-                        order.updateQuantity(quantity);
+                        order.updateOrder(quantity);
                         System.out.println("Order has been updated successfully");
                     }
                 } else if (answer.equalsIgnoreCase("comment")) {
                     System.out.println("Enter a new comment.");
                     String newComment =  scanner.nextLine();
-                    order.updateComment(newComment);
+                    order.updateOrder(newComment);
                 } else {
                     System.out.println("Unknown command");
                 }

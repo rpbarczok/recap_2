@@ -22,4 +22,7 @@ public interface OrderRepo {
 
     public Product addProduct(String name, BigDecimal price);
 
+    public Order updateOrder(int orderId, Status status);
+    public Order updateOrder(int orderId, String comment);
+    public Order updateOrder(int orderId, int  quantity);
 }

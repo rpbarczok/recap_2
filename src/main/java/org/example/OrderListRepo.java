@@ -48,4 +48,36 @@ public class OrderListRepo implements OrderRepo {
         return orders.get(orderId);
     }
 
+    public Order updateOrder(int orderId, int quantity) {
+        Order foundOrder = null;
+        for (Order order : orders) {
+            if (order.getOrderId() == orderId) {
+                order.updateOrder(quantity);
+                foundOrder = orders.get(orders.indexOf(order));
+            }
+        }
+        return foundOrder;
+    }
+
+    public Order updateOrder(int orderId, Status status) {
+        Order foundOrder = null;
+        for (Order order : orders) {
+            if (order.getOrderId() == orderId) {
+                order.updateOrder(status);
+                foundOrder = orders.get(orders.indexOf(order));
+            }
+        }
+        return foundOrder;
+    }
+
+    public Order updateOrder(int orderId, String comment) {
+        Order foundOrder = null;
+        for (Order order : orders) {
+            if (order.getOrderId() == orderId) {
+                order.updateOrder(comment);
+                foundOrder = orders.get(orders.indexOf(order));
+            }
+        }
+        return foundOrder;
+    }
 }
